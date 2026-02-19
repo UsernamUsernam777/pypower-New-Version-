@@ -1,4 +1,5 @@
-# pypower
+# pypower New Version
+#Update of in_bg function
 a useful lib for GUI, Math and so much more!
 
 
