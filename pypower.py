@@ -161,8 +161,14 @@ class GUI:
             result.write(text, font=font, align=align)
             return result
 class String:
-    def __init__(self, text):
-        self.text = text
+    def between(text, c1, c2):
+        if c1 in self.text and c2 in self.text:
+            index = [self.text.index(c1)+1, self.text.index(c2)]
+            return self.text[index[0]:index[1]]
+        else:
+            print('the object is not found!')
+        def __init__(self, text):
+            self.text = text
     def en_nums_to_ar(self):
         """Convert English digits in the string to Arabic-Indic digits."""
         dist = {'0': 'Û°', '1': 'Û±', '2': 'Û²', '3': 'Û³', '4': 'Ù¤', '5': 'Ù¥', '6': 'Ù¦', '7': 'Ù§', '8': 'Û¸', '9': 'Û¹'}
@@ -292,4 +298,3 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
-Other.copy_pypower('pypower.py')
