@@ -11,7 +11,7 @@ class Time:
     def convert_to_iterable_and_int(time_str, type_output=tuple):
         return type_output(map(int, time_str.split(':')))
     def how_many_hms_in_s(sec):
-        """how many hours, minutes and seconds in seconds"""
+        """how many hours, minutes and seconds in seconds"""سن
         hours = sec // 3600
         minutes = (sec % 3600) // 60
         seconds = (sec % 3600) % 60
@@ -22,8 +22,8 @@ class Other:
             a = String(input('')).sk()
             _pyperclip.copy(a)
             print(a)
-    def copy_pypower():
-        with open(r"C:\Users\power\AppData\Local\Programs\Python\Python314\pypower.py", 'r', encoding='utf-8') as f:
+    def copy_pypower(path=_os.path.expanduser('~')+r'\AppData\Local\Programs\Python\Python314\pypower.py'):
+        with open(path, 'r', encoding='utf-8') as f:
             _pyperclip.copy(f.read())
     def search_google(text):
         _webbrowser.open_new_tab(f"https://www.google.com/search?q={text}&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCEEUYOxjCAzIRCAMQABgDGEIYjwEYtAIY6gIyDwgEEC4YAxiPARi0AhjqAjIRCAUQABgDGEIYjwEYtAIY6gIyEQgGEAAYAxhCGI8BGLQCGOoCMg8IBxAuGAMYjwEYtAIY6gLSAQg0MDVqMGoxNagCCLACAfEF1j7Fc7lEloM&sourceid=chrome&ie=UTF-8")
@@ -66,8 +66,8 @@ class Files:
             else:
                 with open(path, 'w', encoding='utf-8') as f:
                     pass
-    def append_to_pypower(class_name, code):
-        Files.append_to_file(r"C:\Users\power\AppData\Local\Programs\Python\Python314\pypower.py", f'\n#{class_name}'+code)
+    def append_to_pypower(path=_os.path.expanduser('~')+r'\AppData\Local\Programs\Python\Python314\pypower.py', class_name, code):
+        Files.append_to_file(path, f'\n#{class_name}'+code)
     def append_to_file(path, text):
         with open(path, 'r', encoding='utf-8') as a:
             old_text = a.read()
@@ -217,45 +217,6 @@ class String:
             else:
                 result += i
         return result
-class Islamic:
-    class PrayTimes:
-        def get_pray_times(path=r"C:\Users\power\Desktop\محمد\Pray Times.txt", date=String(str(_datetime.date.today())).reverse('-')):
-            """date_format = dd-mm-yyyy ex: 01-12-2024"""
-            try:
-                with open(path, 'r', encoding='utf-8') as f:
-                    f = f.read().replace(' (EET)', '').split('\n')
-                times = {}
-                for i in f:
-                    times[i[0:10]] = i[12:]
-                new = times[date].replace(',', ' ').replace('  ', ' ').split()
-                new2 = [i.split('=') for i in new]
-                times = {}
-                for i in new2:
-                    times[i[0]] = i[-1]
-                return {'date': date, 'times': times}
-            except FileNotFoundError:
-                print('File not found')
-            except KeyError:
-                print("doesn't match format ''dd-mm-yyyy or invalid date")
-        def update_pray_times(path=r"C:\Users\power\Desktop\محمد\Pray Times.txt", year=_datetime.datetime.today().year, month=_datetime.datetime.today().month):
-            """append pray times to txt file
-Note: don't edit this file manually"""
-            import requests as _requests
-            latitude = 29.897304487603712
-            longitude = 31.25989117914794
-            method = 5
-            url = f"http://api.aladhan.com/v1/calendar?latitude={latitude}&longitude={longitude}&method={method}&month={month}&year={year}"
-            try:
-                data = _requests.get(url).json()['data']
-                all = ''
-                for i in data:
-                    date = i['date']['gregorian']['date']
-                    timings = i['timings']
-                    all += f"{date}: Fajr={timings['Fajr']}, Sunrise={timings['Sunrise']},Dhuhr={timings['Dhuhr']}, Asr={timings['Asr']}, Maghrib={timings['Maghrib']}, Isha={timings['Isha']}" + '\n'
-                with open(path, 'w', encoding='utf-8') as f:
-                    f.write(all.strip().replace('\n\n', '\n'))
-            except ConnectionError:
-                print('Error!')
 class Iterable:
     def numred(iterable):
         """numred the objects in an iterable ex: if you want to create numred tasks
