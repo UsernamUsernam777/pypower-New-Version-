@@ -161,14 +161,8 @@ class GUI:
             result.write(text, font=font, align=align)
             return result
 class String:
-    def between(text, c1, c2):
-        if c1 in self.text and c2 in self.text:
-            index = [self.text.index(c1)+1, self.text.index(c2)]
-            return self.text[index[0]:index[1]]
-        else:
-            print('the object is not found!')
-        def __init__(self, text):
-            self.text = text
+    def __init__(self, text):
+        self.text = text
     def en_nums_to_ar(self):
         """Convert English digits in the string to Arabic-Indic digits."""
         dist = {'0': 'Û°', '1': 'Û±', '2': 'Û²', '3': 'Û³', '4': 'Ù¤', '5': 'Ù¥', '6': 'Ù¦', '7': 'Ù§', '8': 'Û¸', '9': 'Û¹'}
@@ -247,10 +241,14 @@ class String:
             else:
                 result += i
         return result
+    def between(self, c1, c2):
+        """return string between two points"""
+        index = [self.text.index(c1)+1, self.text.index(c2)]
+        return self.text[index[0]:index[1]]
 class Iterable:
     def numred(iterable):
         """numred the objects in an iterable ex: if you want to create numred tasks
-            numred(['visiting my uncle', 'water the plants']) âž¡ 1.visiting my uncle"""
+            numred(['visiting my uncle', 'water the plants'])  1.visiting my uncle"""
         result = ''
         for i in range(len(iterable)):
             result += f"{i+1}. {iterable[i]}\n"
@@ -264,6 +262,12 @@ result = ['Olivia', 'mark']"""
         co = lst[:]
         co[index-1] = new_obj
         return co
+    def all_in(main_iterable, iterable):
+        """Checks if all unique elements of 'iterable' exist within 'main_iterable'."""
+        for i in set(iterable):
+            if i not in main_iterable:
+                return False
+        return True
     class Dict:
         def swap_dict(dic):
             """k: v âž¡ v, k"""
