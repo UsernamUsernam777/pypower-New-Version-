@@ -227,10 +227,10 @@ class String:
         result = ''
         for i in self.text:
             if i not in iterable:
-                s += i
+                result += i
             else:
-                s += new_obj
-        return s
+                result += new_obj
+        return result
     def replace_many(self, old_iterable, new_iterable):
         """Replace each character in old_iterable with the matching one in new_iterable."""
         result = ''
@@ -261,9 +261,9 @@ class Iterable:
     def replace(iterable, index, new_obj):
         """replace an object by it's index with new_obj ex:    replace(['mike', 'mark'], 1, 'Olivia')
 result = ['Olivia', 'mark']"""
-        co = lst[:]
-        co[index-1] = new_obj
-        return co
+        copy_list = lst[:]
+        copy_list[index-1] = new_obj
+        return copy_list
     def all_in(main_iterable, iterable):
         """Checks if all unique elements of 'iterable' exist within 'main_iterable'."""
         for i in set(iterable):
@@ -272,7 +272,7 @@ result = ['Olivia', 'mark']"""
         return True
     class Dict:
         def swap_dict(dic):
-            """k: v âž¡ v, k"""
+            """k: v ➡ v, k"""
             result = {}
             for k, v in dic.items():
                 if isinstance(v, (list, tuple, set, dict)):
@@ -304,4 +304,3 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
-
