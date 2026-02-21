@@ -5,7 +5,6 @@ import time as _time
 import webbrowser as _webbrowser
 import os as _os
 import subprocess as _subprocess
-from turtle import Turtle as _Turtle
 class Time:
     """convert time to type_output"""
     def convert_to_iterable_and_int(time_str, type_output=tuple):
@@ -305,3 +304,4 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
+
