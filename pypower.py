@@ -6,10 +6,10 @@ import webbrowser as _webbrowser
 import os as _os
 import subprocess as _subprocess
 from turtle import Turtle as _Turtle
+import ast as _ast
 class Time:
     """convert time to type_output"""
     def convert_to_iterable_and_int(time_str, type_output=tuple):
-        """Convert 'HH:MM:SS' string to an iterable of ints. ex: '01:30:45' -> (1, 30, 45)"""
         return type_output(map(int, time_str.split(':')))
     def how_many_hms_in_s(sec):
         """how many hours, minutes and seconds in seconds"""
@@ -19,20 +19,16 @@ class Time:
         return f"{hours:02}:{minutes:02}:{seconds:02}"
 class Other:
     def sk_loop():
-        """Continuously read input, convert it with sk(), copy to clipboard, and print."""
         while True:
             a = String(input('')).sk()
             _pyperclip.copy(a)
             print(a)
-    def copy_pypower(path):
-        """Copy the contents of pypower.py to the clipboard."""
-        with open(path, 'r', encoding='utf-8') as f:
+    def copy_pypower():
+        with open(r"C:\Users\power\AppData\Local\Programs\Python\Python314\pypower.py", 'r', encoding='utf-8') as f:
             _pyperclip.copy(f.read())
     def search_google(text):
-        """Open a new browser tab with a Google search for text."""
         _webbrowser.open_new_tab(f"https://www.google.com/search?q={text}&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCEEUYOxjCAzIRCAMQABgDGEIYjwEYtAIY6gIyDwgEEC4YAxiPARi0AhjqAjIRCAUQABgDGEIYjwEYtAIY6gIyEQgGEAAYAxhCGI8BGLQCGOoCMg8IBxAuGAMYjwEYtAIY6gLSAQg0MDVqMGoxNagCCLACAfEF1j7Fc7lEloM&sourceid=chrome&ie=UTF-8")
     def in_bg(name, duration, action=None):
-        """Run action in a background thread after duration seconds."""
         import threading as _threading
         names = [i.name for i in _threading.enumerate()]
         if name not in names:
@@ -43,7 +39,6 @@ class Other:
             _threading.Thread(name=name, target=v, daemon=True).start()
 class Apps:
     def create_app(path, icon=None):
-        """Build a standalone .exe from a .py file using PyInstaller, then clean up build files."""
         def mainloop():
             if not _os.path.exists(path):
                 print('Error!')
@@ -68,18 +63,15 @@ class Apps:
         Other.in_bg(2, mainloop)
 class Files:
     def make_if_not_exists(path, type=''):
-        """Create a folder (type='') or empty file at path if it doesn't exist."""
         if not _os.path.exists(path):
             if type == '':
                 _os.mkdir(path)
             else:
                 with open(path, 'w', encoding='utf-8') as f:
                     pass
-    def append_to_pypower(path, class_name, code):
-        """Append a labeled code block to pypower.py."""
-        Files.append_to_file(path, f'\n#{class_name}'+code)
+    def append_to_pypower(class_name, code):
+        Files.append_to_file(r"C:\Users\power\AppData\Local\Programs\Python\Python314\pypower.py", f'\n#{class_name}'+code)
     def append_to_file(path, text):
-        """Append text to a file, removing double blank lines."""
         with open(path, 'r', encoding='utf-8') as a:
             old_text = a.read()
         with open(path, 'w', encoding='utf-8') as b:
@@ -88,7 +80,6 @@ class Files:
 class GUI:
     class CustomTk:
         def tidy_up(widgets, per_row, distance_down=5, distance_across=5):
-            """Arrange widgets in a grid with a fixed number per row."""
             columns = 0
             rows = 1
             for w in widgets:
@@ -97,8 +88,19 @@ class GUI:
                 if columns in Math.number_multiplies(per_row, len(widgets)):
                     rows += 1
                     columns = 0
+        def there_is_label_has_the_same_text(master, label):
+            """
+        Check if any CTkLabel within the master widget already contains the same text as the given label.
+        
+        Returns True if a match is found, otherwise False. This is useful for preventing 
+        duplicate entries in logs or history tabs.
+        """
+            for i in master.winfo_children():
+                if isinstance(i, _ctk.CTkLabel):
+                    if i.cget('text') == label.cget('text') and i.winfo_ismapped():
+                        return True
+            return False
         def all_objects(master):
-            """Return a flat list of all child widgets in master."""
             result = []
             for i in master.winfo_children():
                 if isinstance(i, list):
@@ -107,14 +109,12 @@ class GUI:
                     result.append(i)
             return result
         def edit_all_widgets_texts(master, font='arial', size=20, text_color='lightblue', bg=''):
-            """Apply font, text color, and background to all child widgets in master."""
             for i in master.winfo_children():
                 if bg:
                     i.configure(font=(font, size), text_color=text_color, fg_color=bg)
                 else:
                     i.configure(font=(font, size), text_color=text_color, fg_color=None)
         def info(widget, information, font='arial', size=20, bg='', hide_after=5):
-            """Show a tooltip label below widget on hover, auto-hide after hide_after seconds."""
             if bg:
                 inf = _ctk.CTkLabel(widget.master, text=information, font=(font, size), fg_color=bg)
             else:
@@ -126,7 +126,6 @@ class GUI:
                 inf.after(hide_after*1000, inf.place_forget)
             widget.bind('<Enter>', show)
         def mouse_wheel_num(entry, start, end):
-            """Scroll through numbers in range [start, end] inside an entry with the mouse wheel."""
             try:
                 def f(e):
                     a = entry.get()
@@ -141,8 +140,11 @@ class GUI:
             except Exception as e:
                 pass
     class Turtle:
+        def rock_bottom(window, obj, before_end=0):
+            x = window.window_width() // 2 - before_end
+            y = window.window_height() // 2 - before_end
+            return abs(obj.xcor()) >= abs(x) or abs(obj.ycor()) >= abs(y)
         def move(obj, distance, direction='forward'):
-            """Move a Turtle object without drawing (pen up then down)."""
             if direction in ['backward', 'forward']:
                 obj.penup()
                 if direction == 'forward':
@@ -152,20 +154,18 @@ class GUI:
                 obj.pendown()
             else:
                 print('Invalid direction!')
-        def write_text(text, font=('arial', 20), color='black', align='center'):
-            """Write text on the turtle canvas and return the hidden Turtle object."""
-            result = _Turtle()
-            result.color(color)
-            result.penup()
-            result.hideturtle()
-            result.write(text, font=font, align=align)
-            return result
 class String:
     def __init__(self, text):
         self.text = text
+    def between(self, c1, c2, include_c1_c2=True):
+        """return string between two points"""
+        index = [self.text.index(c1), self.text.index(c2)+1]
+        if not include_c1_c2:
+            index[0] = index[0] + 1
+            index[1] = index[1] - 1
+        return self.text[index[0]:index[1]]
     def en_nums_to_ar(self):
-        """Convert English digits in the string to Arabic-Indic digits."""
-        dist = {'0': 'Û°', '1': 'Û±', '2': 'Û²', '3': 'Û³', '4': 'Ù¤', '5': 'Ù¥', '6': 'Ù¦', '7': 'Ù§', '8': 'Û¸', '9': 'Û¹'}
+        dist = {'0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '٤', '5': '٥', '6': '٦', '7': '٧', '8': '۸', '9': '۹'}
         result = ''
         for i in self.text:
             if i in dist:
@@ -174,7 +174,6 @@ class String:
                 result += i
         return result
     def there_is_a_number(self , start=0, end=9):
-        """Return True if the string contains any digit in range [start, end]."""
         a = ''
         for i in self.text:
             if i.isdigit():
@@ -182,7 +181,6 @@ class String:
                     a += i
         return bool(a)
     def super_join(self, sep, after_how_many_letters, with_spaces=True):
-        """Insert sep every after_how_many_letters characters in the string."""
         value = 0
         new = ''
         ran = Math.number_multiplies(after_how_many_letters, len(self.text)-1)
@@ -221,10 +219,8 @@ class String:
         else:
             return ''
     def reverse(self, sep):
-        """Reverse the order of parts split by sep. ex: 'a-b-c' -> 'c-b-a'"""
         return f'{sep}'.join(self.text.split(sep)[::-1])
     def replace_objects_with_one(self, iterable, new_obj=''):
-        """Replace every character found in iterable with new_obj."""
         result = ''
         for i in self.text:
             if i not in iterable:
@@ -233,7 +229,6 @@ class String:
                 s += new_obj
         return s
     def replace_many(self, old_iterable, new_iterable):
-        """Replace each character in old_iterable with the matching one in new_iterable."""
         result = ''
         for i in self.text:
             if i in old_iterable:
@@ -241,14 +236,49 @@ class String:
             else:
                 result += i
         return result
-    def between(self, c1, c2):
-        """return string between two points"""
-        index = [self.text.index(c1)+1, self.text.index(c2)]
-        return self.text[index[0]:index[1]]
+class Islamic:
+    class PrayTimes:
+        def get_pray_times(path=r"C:\Users\power\Desktop\محمد\Pray Times.txt", date=String(str(_datetime.date.today())).reverse('-')):
+            """date_format = dd-mm-yyyy ex: 01-12-2024"""
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    f = f.read().replace(' (EET)', '').split('\n')
+                times = {}
+                for i in f:
+                    times[i[0:10]] = i[12:]
+                new = times[date].replace(',', ' ').replace('  ', ' ').split()
+                new2 = [i.split('=') for i in new]
+                times = {}
+                for i in new2:
+                    times[i[0]] = i[-1]
+                return {'date': date, 'times': times}
+            except FileNotFoundError:
+                print('File not found')
+            except KeyError:
+                print("doesn't match format ''dd-mm-yyyy or invalid date")
+        def update_pray_times(path=r"C:\Users\power\Desktop\محمد\Pray Times.txt", year=_datetime.datetime.today().year, month=_datetime.datetime.today().month):
+            """append pray times to txt file
+Note: don't edit this file manually"""
+            import requests as _requests
+            latitude = 29.897304487603712
+            longitude = 31.25989117914794
+            method = 5
+            url = f"http://api.aladhan.com/v1/calendar?latitude={latitude}&longitude={longitude}&method={method}&month={month}&year={year}"
+            try:
+                data = _requests.get(url).json()['data']
+                all = ''
+                for i in data:
+                    date = i['date']['gregorian']['date']
+                    timings = i['timings']
+                    all += f"{date}: Fajr={timings['Fajr']}, Sunrise={timings['Sunrise']},Dhuhr={timings['Dhuhr']}, Asr={timings['Asr']}, Maghrib={timings['Maghrib']}, Isha={timings['Isha']}" + '\n'
+                with open(path, 'w', encoding='utf-8') as f:
+                    f.write(all.strip().replace('\n\n', '\n'))
+            except ConnectionError:
+                print('Error!')
 class Iterable:
     def numred(iterable):
         """numred the objects in an iterable ex: if you want to create numred tasks
-            numred(['visiting my uncle', 'water the plants'])  1.visiting my uncle"""
+            numred(['visiting my uncle', 'water the plants']) ➡ 1.visiting my uncle"""
         result = ''
         for i in range(len(iterable)):
             result += f"{i+1}. {iterable[i]}\n"
@@ -262,15 +292,9 @@ result = ['Olivia', 'mark']"""
         co = lst[:]
         co[index-1] = new_obj
         return co
-    def all_in(main_iterable, iterable):
-        """Checks if all unique elements of 'iterable' exist within 'main_iterable'."""
-        for i in set(iterable):
-            if i not in main_iterable:
-                return False
-        return True
     class Dict:
         def swap_dict(dic):
-            """k: v âž¡ v, k"""
+            """k: v ➡ v, k"""
             result = {}
             for k, v in dic.items():
                 if isinstance(v, (list, tuple, set, dict)):
@@ -278,21 +302,16 @@ result = ['Olivia', 'mark']"""
                 result[v] = k
             return result
     def return_dict_in_lines(dec):
-        """Return a dict formatted as 'key: value' lines."""
         result = ''
         for i in dec:
             result += f"{i}: {dec[i]}\n"
         return result.strip()
 class Math:
     def iter_num(iterable):
-        """Return sum, average, max, and min of an iterable as a dict."""
         return {'sum': sum(iterable), 'average': sum(iterable) / len(iterable), 'max': max(iterable), 'min': min(iterable)}
     def number_multiplies(num, end, type=list):
-        """Return all multiples of num up to end. ex: number_multiplies(3, 9) -> [3, 6, 9]"""
         return type(range(num, end+1, num))
     def arrays(array, step, show='lists'):
-        """Split a range into consecutive [start, end] pairs by step.
-        If show != 'lists', return a formatted string instead."""
         result = []
         for i in range(step, array, step):
             result.append([i, i+step])
