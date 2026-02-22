@@ -92,6 +92,7 @@ class GUI:
             height = [i.winfo_reqheight() for i in widgets]
             for i in widgets:
                 i.configure(width=max(width), height=max(height))
+        def tidy_up(widgets, per_row, start_from_row=0, start_from_column=0, distance_down=5, distance_across=5):
             """
             Arrange widgets in a grid with a fixed number per row.
             """
@@ -154,6 +155,18 @@ class GUI:
                 entry.bind("<MouseWheel>", f)
             except Exception as e:
                 pass
+        def there_is_obj_has_the_same_text(master, label):
+            """
+        Check if any CTkLabel within the master widget already contains the same text as the given label.
+        
+        Returns True if a match is found, otherwise False. This is useful for preventing 
+        duplicate entries in logs or history tabs.
+        """
+            for i in master.winfo_children():
+                if isinstance(i, (_ctk.CTkLabel, _ctk.CTkButton)):
+                    if i.cget('text') == label.cget('text') and i.winfo_ismapped():
+                        return True
+            return False
     class Turtle:
         def rock_bottom(window, obj, before_end=0):
             x = window.window_width() // 2 - before_end
@@ -312,4 +325,3 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
-
