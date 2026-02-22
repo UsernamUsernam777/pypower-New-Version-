@@ -86,12 +86,13 @@ class Files:
             b.write(new_text.replace('\n\n', '\n'))
 class GUI:
     class CustomTk:
-        def tidy_up(widgets, per_row, start_from_row=1, start_from_column=0, distance_down=5, distance_across=5):
+        def tidy_up(widgets, per_row, start_from_row=0, start_from_column=0, distance_down=5, distance_across=5):
             """
             Arrange widgets in a grid with a fixed number per row.
-            Note: To preserve empty space before start_from_row/column, 
-            configure the row/column minsize in your main window.
             """
+            master = widgets[0].master
+            for i in range(start_from_row+1):
+                master.grid_rowconfigure(i, minsize=widgets[0].winfo_reqheight())
             columns = start_from_column
             rows = start_from_row
             allowed_num = 0
