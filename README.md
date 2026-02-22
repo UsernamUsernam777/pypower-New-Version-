@@ -1,6 +1,6 @@
 # pypower (New Version)
-#Update of in_bg function
-
+#Update of tidy_up function
+Note: this lib is updated everytime
 
 #a useful lib for GUI, Math and so much more!
 
