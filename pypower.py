@@ -86,7 +86,12 @@ class Files:
             b.write(new_text.replace('\n\n', '\n'))
 class GUI:
     class CustomTk:
-        def tidy_up(widgets, per_row, start_from_row=0, start_from_column=0, distance_down=5, distance_across=5):
+        def good_size(widgets):
+            """resize widgets with the biggest size (height, width)"""
+            width = [i.winfo_reqwidth() for i in widgets]
+            height = [i.winfo_reqheight() for i in widgets]
+            for i in widgets:
+                i.configure(width=max(width), height=max(height))
             """
             Arrange widgets in a grid with a fixed number per row.
             """
@@ -307,3 +312,4 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
+
