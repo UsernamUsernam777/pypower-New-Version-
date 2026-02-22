@@ -93,6 +93,8 @@ class GUI:
             master = widgets[0].master
             for i in range(start_from_row+1):
                 master.grid_rowconfigure(i, minsize=widgets[0].winfo_reqheight())
+            for i in range(start_from_column+1):
+                master.grid_columnconfigure(i, minsize=widgets[0].winfo_reqwidth())
             columns = start_from_column
             rows = start_from_row
             allowed_num = 0
