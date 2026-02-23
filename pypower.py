@@ -16,7 +16,7 @@ class Time:
         minutes = (sec % 3600) // 60
         seconds = (sec % 3600) % 60
         return f"{hours:02}:{minutes:02}:{seconds:02}"
-    def reverse_many_hms(time_str):
+    def reverse_hms(time_str):
         result = Time.convert_to_iterable_and_int(time_str)
         return (result[0]*3600) + (result[1]*60) + result[2]
 class Other:
@@ -328,3 +328,4 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
+
