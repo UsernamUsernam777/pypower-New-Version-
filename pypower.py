@@ -20,12 +20,6 @@ class Time:
         result = Time.convert_to_iterable_and_int(time_str)
         return (result[0]*3600) + (result[1]*60) + result[2]
 class Other:
-    def sk_loop():
-        """Continuously read input, convert it with sk(), copy to clipboard, and print."""
-        while True:
-            a = String(input('')).sk()
-            _pyperclip.copy(a)
-            print(a)
     def copy_pypower(path):
         """Copy the contents of pypower.py to the clipboard."""
         with open(path, 'r', encoding='utf-8') as f:
@@ -212,32 +206,6 @@ class String:
         if not with_spaces:
             new = new.replace(sep+' '+sep, sep+' ')
         return new
-    def sk(self, copy=False):
-        if self.text:
-            s = ''
-            eng_ara = {'`': 'ذ', 'q': 'ض', 'w': 'ص', 'e': 'ث', 'r': 'ق', 't': 'ف', 'y': 'غ', 'u': 'ع', 'i': 'ه', 'o': 'خ', 'p': 'ح', '[': 'ج', ']': 'د', 'a': 'ش', 's': 'س', 'd': 'ي', 'f': 'ب', 'g': 'ل', 'h': 'ا',
-                       'j': 'ت', 'k': 'ن', 'l': 'م', ';': 'ك', "'": 'ط', 'z': 'ئ', 'x': 'ء', 'c': 'ؤ', 'v': 'ر', 'b': 'لا', 'n': 'ى', 'm': 'ة', ',': 'و', '.': 'ز', '/': 'ظ'}
-            eng_ara_shift = {'~': 'ّ', 'Q': 'َ', 'W': 'ً', 'E': 'ُ', 'R': 'ٌ', 'T': 'لإ', 'Y': 'إ', 'U': '‘', 'I': '÷', 'O': '×', 'P': '؛', '{': '<', '}': '>', 'A': 'ِ', 'S': 'ٍ',
-                             'D': ']', 'F': '[', 'G': 'لأ', 'H': 'أ', 'J': 'ـ', 'K': '،', 'L': '/', ':': ':', '"': '"', 'Z': '~', 'X': 'ْ', 'C': '}', 'V': '{', 'B': 'لآ', 'N': 'آ', 'M': '’', '<': ',', '>': '.', '?': '؟'}
-            swap_eng_ara = {v: k for k, v in eng_ara.items()}
-            swap_eng_ara_shift = {v: k for k, v in eng_ara_shift.items()}
-            for i in self.text:
-                if i in eng_ara:
-                    s += eng_ara[i]
-                elif i in swap_eng_ara:
-                    s += swap_eng_ara[i]
-            #shift
-                elif i in eng_ara_shift:
-                    s += eng_ara_shift[i]
-                elif i in swap_eng_ara_shift:
-                    s += swap_eng_ara_shift[i]
-                else:
-                    s += i
-            if s and copy:
-                _pyperclip.copy(s)
-            return s
-        else:
-            return ''
     def reverse(self, sep):
         """Reverse the order of parts split by sep. ex: 'a-b-c' -> 'c-b-a'"""
         return f'{sep}'.join(self.text.split(sep)[::-1])
@@ -355,3 +323,4 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
+
