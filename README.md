@@ -1,8 +1,6 @@
 # pypower (New Version)
-#Update of tidy_up function
+Update tidy_up logic for better grid alignment
 Note: this lib is updated everytime
-
-#a useful lib for GUI, Math and so much more!
 
 
 
