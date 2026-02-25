@@ -16,7 +16,7 @@ class Time:
         minutes = (sec % 3600) // 60
         seconds = (sec % 3600) % 60
         return f"{hours:02}:{minutes:02}:{seconds:02}"
-    def reverse_hms(time_str):
+    def reverse_many_hms(time_str):
         result = Time.convert_to_iterable_and_int(time_str)
         return (result[0]*3600) + (result[1]*60) + result[2]
 class Other:
@@ -34,7 +34,8 @@ class Other:
         """Open a new browser tab with a Google search for text."""
         _webbrowser.open_new_tab(f"https://www.google.com/search?q={text}&oq=&gs_lcrp=EgZjaHJvbWUqCQgAECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCEEUYOxjCAzIRCAMQABgDGEIYjwEYtAIY6gIyDwgEEC4YAxiPARi0AhjqAjIRCAUQABgDGEIYjwEYtAIY6gIyEQgGEAAYAxhCGI8BGLQCGOoCMg8IBxAuGAMYjwEYtAIY6gLSAQg0MDVqMGoxNagCCLACAfEF1j7Fc7lEloM&sourceid=chrome&ie=UTF-8")
     def in_bg(name, duration, action=None):
-        """Run action in a background thread after duration seconds."""
+        """Run action in a background thread after duration seconds.
+don't write repeated name."""
         import threading as _threading
         names = [i.name for i in _threading.enumerate()]
         if name not in names:
@@ -49,25 +50,26 @@ class Apps:
         def mainloop():
             if not _os.path.exists(path):
                 print('Error!')
-            pj = _os.path.dirname(path)
-            n_py = _os.path.basename(path)
-            n_exe = _os.path.basename(path).replace('.py', '.exe')
-            n_spec = _os.path.basename(path).replace('.py', '.spec')
-            pro = ['pyinstaller', '--onefile', '--windowed', n_py]
-            _os.chdir(pj)
-            if icon:
-                pro.append(f'--icon={icon}')
-            p = _subprocess.Popen(pro, creationflags=_subprocess.CREATE_NO_WINDOW)
-            p.wait()
-            if _os.path.exists(_os.path.join('dist', n_exe)):
-                _os.replace(_os.path.join('dist', n_exe), _os.path.join(pj, n_exe))
-            if _os.path.exists(_os.path.join(pj, n_exe)):
-                _os.system('rmdir /s /q dist')
-                _os.system('rmdir /s /q build')
-                _os.remove(n_spec)
-            if _os.path.exists(path.replace('.py', '.exe')):
-                print(f"App Created Successed in {path.replace('.py', '.exe')}")
-        Other.in_bg(2, mainloop)
+            else:
+                pj = _os.path.dirname(path)
+                n_py = _os.path.basename(path)
+                n_exe = _os.path.basename(path).replace('.py', '.exe')
+                n_spec = _os.path.basename(path).replace('.py', '.spec')
+                pro = ['pyinstaller', '--onefile', '--windowed', n_py]
+                _os.chdir(pj)
+                if icon:
+                    pro.append(f'--icon={icon}')
+                p = _subprocess.Popen(pro, creationflags=_subprocess.CREATE_NO_WINDOW)
+                p.wait()
+                if _os.path.exists(_os.path.join('dist', n_exe)):
+                    _os.replace(_os.path.join('dist', n_exe), _os.path.join(pj, n_exe))
+                if _os.path.exists(_os.path.join(pj, n_exe)):
+                    _os.system('rmdir /s /q dist')
+                    _os.system('rmdir /s /q build')
+                    _os.remove(n_spec)
+                if _os.path.exists(path.replace('.py', '.exe')):
+                    print(f"App Created Successed in {path.replace('.py', '.exe')}")
+        Other.in_bg(1, mainloop)
 class Files:
     def make_if_not_exists(path, type=''):
         """Create a folder (type='') or empty file at path if it doesn't exist."""
@@ -79,7 +81,7 @@ class Files:
                     pass
     def append_to_pypower(path, class_name, code):
         """Append a labeled code block to pypower.py."""
-        Files.append_to_file(path, f'\n#{class_name}'+code)
+        Files.append_to_file(path, f'\n#{class_name}\n'+code)
     def append_to_file(path, text):
         """Append text to a file, removing double blank lines."""
         with open(path, 'r', encoding='utf-8') as a:
@@ -158,19 +160,12 @@ class GUI:
                 entry.bind("<MouseWheel>", f)
             except Exception as e:
                 pass
-        def there_is_obj_has_the_same_text(master, label):
-            """
-        Check if any CTkLabel within the master widget already contains the same text as the given label.
-        
-        Returns True if a match is found, otherwise False. This is useful for preventing 
-        duplicate entries in logs or history tabs.
-        """
-            for i in master.winfo_children():
-                if isinstance(i, (_ctk.CTkLabel, _ctk.CTkButton)):
-                    if i.cget('text') == label.cget('text') and i.winfo_ismapped():
-                        return True
-            return False
     class Turtle:
+        def in_circle(turtle_obj, shape_as_func, how_many=10):
+            """draw shape_as_func in circle"""
+            for i in range(how_many):
+                shape_as_func()
+                turtle_obj.left(360/how_many)
         def rock_bottom(window, obj, before_end=0):
             x = window.window_width() // 2 - before_end
             y = window.window_height() // 2 - before_end
@@ -272,6 +267,35 @@ class String:
             index[1] = index[1] - 1
         return self.text[index[0]:index[1]]
 class Iterable:
+    def get_circular_index(iterable, index, return_obj=False):
+        """
+    Return the element at 'index' using modulo to wrap around if index >= len(iterable).
+    This creates a circular loop, preventing IndexError and allowing infinite cycling.
+    Example: get_circular_index(['a', 'b'], 2) -> 'a'
+    """
+        i = index % len(iterable)
+        if return_obj:
+            return iterable[i]
+        else:
+            return i
+    def any_is_class(iterable, clas, first_object_only=True):
+        """
+    Check for objects of a specific class in an iterable.
+
+    Returns the first match if first_object_only is True (default). 
+    Otherwise, returns a set of all matches for O(1) membership testing.
+    """
+        if first_object_only:
+            for i in iterable:
+                if isinstance(i, clas):
+                    return i
+            return []
+        else:
+            result = set()
+            for i in iterable:
+                if isinstance(i, clas):
+                    result.add(i)
+            return result if result else []
     def numred(iterable):
         """numred the objects in an iterable ex: if you want to create numred tasks
             numred(['visiting my uncle', 'water the plants'])  1.visiting my uncle"""
@@ -282,12 +306,15 @@ class Iterable:
     def return_brakets():
         """return the brakets in a dict"""
         return {'list': ('[', ']'), 'tuple':('(', ')'), 'curley': ('{', '}')}
-    def replace(iterable, index, new_obj):
+    def replace_iterable(iterable, index, new_obj=None):
         """replace an object by it's index with new_obj ex:    replace(['mike', 'mark'], 1, 'Olivia')
 result = ['Olivia', 'mark']"""
-        copy_list = lst[:]
-        copy_list[index-1] = new_obj
-        return copy_list
+        co = iterable.copy()
+        if new_obj:
+            co[index-1] = new_obj
+        else:
+            co.remove(co[index-1])
+        return co
     def all_in(main_iterable, iterable):
         """Checks if all unique elements of 'iterable' exist within 'main_iterable'."""
         for i in set(iterable):
@@ -328,4 +355,3 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
-
