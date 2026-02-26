@@ -178,13 +178,6 @@ class GUI:
 class String:
     def __init__(self, text):
         self.text = text
-    def between(self, c1, c2, include_c1_c2=True):
-        """return string between two points"""
-        index = [self.text.index(c1), self.text.index(c2)+1]
-        if not include_c1_c2:
-            index[0] = index[0] + 1
-            index[1] = index[1] - 1
-        return self.text[index[0]:index[1]]
     def there_is_a_number(self , start=0, end=9):
         """Return True if the string contains any digit in range [start, end]."""
         a = ''
@@ -323,4 +316,3 @@ class Math:
                 result2 += str((i, e)).replace('(', '').replace(')', '').replace(', ', ' - ')+'\n'
             return result2.strip()
         return result
-
